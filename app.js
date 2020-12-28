@@ -8,6 +8,16 @@ const app = express();
 app.use(express.json());
 app.use(router);
 
+// Error handler
+app.use((err,request, response, next) => {
+    console.log(err);
+    response
+    .status(400)
+    .json({
+        success: false
+    })
+} )
+
 // Connection Mongoose
 clientMongoose();
 
