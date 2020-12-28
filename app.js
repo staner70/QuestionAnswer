@@ -2,21 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const router = require('./app/routers');
 const clientMongoose = require('./app/database/client');
+const { urlencoded } = require('express');
 
 const app = express();
 
+// Express - Body Middleware
 app.use(express.json());
+
 app.use(router);
 
-// Error handler
-app.use((err,request, response, next) => {
-    console.log(err);
-    response
-    .status(400)
-    .json({
-        success: false
-    })
-} )
 
 // Connection Mongoose
 clientMongoose();
