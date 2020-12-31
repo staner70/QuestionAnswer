@@ -13,6 +13,10 @@ module.exports = {
         if (error.name === "ValidationError") {
             customError = new CustomError(error.message, 400)
         }
+        if (error.code === 11000) {
+            // Duplicate Key
+            customError = new CustomError("Duplicate Key Found : Check Your Input",400);
+        }
         console.log(customError.message,customError.status);
 
         response.status(customError.status || 500)

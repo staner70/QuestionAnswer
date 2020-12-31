@@ -1,13 +1,15 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const router = require('./app/routers');
 const clientMongoose = require('./app/database/client');
-const { urlencoded } = require('express');
+// const { urlencoded } = require('express');
 
 const app = express();
 
 // Express - Body Middleware
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'app/public')));
 
 app.use(router);
 
