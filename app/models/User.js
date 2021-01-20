@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const UserSchema = new Schema({
   name:  {
@@ -45,6 +46,12 @@ const UserSchema = new Schema({
   blocked: {
       type: Boolean,
       default: false
+  },
+  resetPasswordToken : {
+      type: String
+  },
+  resetPasswordExpire: {
+      type: Date
   }
 });
 // UserSchema Methods
@@ -60,6 +67,22 @@ UserSchema.methods.generateJwtFromUser = function() {
         expiresIn : JWT_EXPIRE
     });
     return token;
+};
+
+UserSchema.methods.getResetPasswordTokenFromUser = function() {
+    const randomHexString = crypto.randomBytes(15).toString("hex");
+    const {RESET_PASSWORD_EXPIRE} = process.env;
+    
+    const resetPasswordToken = crypto
+    .createHash("SHA256")
+    .update(randomHexString)
+    .digest(("hex"));
+    // console.log(resetPasswordToken);
+    // return resetPasswordToken;
+    this.resetPasswordToken = resetPasswordToken;
+    this.resetPasswordExpire = Date.now() + parseInt(RESET_PASSWORD_EXPIRE);
+
+    return resetPasswordToken;
 }
 
 UserSchema.pre("save", function(next) {
