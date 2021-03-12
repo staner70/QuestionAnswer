@@ -4,7 +4,7 @@ module.exports = {
 
     errorHandler: async (error, request, response, next) => {
         let customError = error;
-        
+        console.log(error.name);
 
         if (error.name === "SyntaxError") {
             customError = new CustomError("Unexpected Syntax", 400);

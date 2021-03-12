@@ -49,7 +49,7 @@ module.exports = {
         }
 
     },
-
+    
     logout: async(req, res, next) => {
 
         const { NODE_ENV } = process.env;
