@@ -2,6 +2,7 @@ const CustomError = require('../../helpers/CustomError');
 const jwt = require('jsonwebtoken');
 const { isTokenIncluded, getAccessTokenFrom } = require('../../helpers/authorization/tokenHelpers');
 const User = require('../../models/User');
+const Question = require("../../models/Question");
 
 
 
@@ -16,6 +17,7 @@ module.exports = {
 
         }
         const accessToken = getAccessTokenFrom(request);
+        console.log(accessToken, "<---- get token");
        
         jwt.verify(accessToken, JWT_SECRET_KEY, (err, decoded) => {
             if (err) {
@@ -42,6 +44,19 @@ module.exports = {
         if (user.role != "admin") {
             return next(new CustomError("Only admins can access this route", 403));
         }
+        next();
+    },
+
+    getQuestionOwnerAccess: async(req,res,next) => {
+        const userId = req.user.id;
+        const questionId = req.params.id;
+
+        const question = await Question.findById(questionId);
+
+        if (question.user != userId) {
+            return next(new CustomError("Only owner can handle this operation", 403));
+        }
+
         next();
     }
 };

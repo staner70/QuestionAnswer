@@ -18,10 +18,10 @@ module.exports = {
     },
 
     checkQuestionExist: async(req,res,next) => {
-        const {id} = req.params;
+        const question_id = req.params.id || req.params.question_id;
 
-        const question = await Question.findById(id);
-        console.log(question, id);
+        const question = await Question.findById(question_id);
+        console.log(question, question_id, "<-- question et id");
         if (!question) {
             return next(new CustomError("There is no such question with that id", 400));
 

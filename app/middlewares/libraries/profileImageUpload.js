@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
         callback(null, path.join(rootDir, "/app/public/uploads"));
     },
     filename: function(req,file,callback) {
-        
+        console.log(file);
         const extension = file.mimetype.split('/')[1];
         req.savedProfileImage = "image_" + req.user.id + "." + extension;
         callback(null, req.savedProfileImage);

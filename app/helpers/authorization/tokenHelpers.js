@@ -33,6 +33,8 @@ module.exports = {
     getAccessTokenFrom: (request) => {
         const authorization = request.headers.authorization;
         const access_token = authorization.split(" ")[1];
+        
+        console.log(authorization, "<-- getAccessToken authorization");
         return access_token;
     }
 }
