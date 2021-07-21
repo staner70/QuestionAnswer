@@ -34,6 +34,29 @@ module.exports = {
             count: answers.length,
             data: answers
         });
+    },    
+    async getSingleAnswer (request, response, next) {
+        const { answer_id } = request.params;
+
+        const answer = await Answer
+        .findById(answer_id)
+        .populate(
+            {
+                path: "question",
+                select: "title"
+            }
+        )
+        .populate(
+            {
+                path: "user",
+                select: "name profile_image"
+            }
+        );
+
+        response.status(200).json({
+            success: true,
+            data: answer
+        });
     },
     
 }
