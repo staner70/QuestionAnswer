@@ -24,7 +24,7 @@ module.exports = {
     async getAllAnswersByQuestion (request, response, next) {
         const { question_id } = request.params;
 
-        const question = await Question.findById(question_id);
+        const question = await Question.findById(question_id).populate("answers");
 
         const answers = question.answers;
 
