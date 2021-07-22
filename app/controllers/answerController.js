@@ -57,6 +57,23 @@ module.exports = {
             success: true,
             data: answer
         });
-    },
+    },    
+    async editAnswer (request, response, next) {
+
+        const {answer_id} = request.params;
+
+        const { content } = request.body;
+
+        let answer = await Answer.findById(answer_id);
+
+        answer.content = content;
+
+        await answer.save();
+
+        response.status(200).json({
+            success: true,
+            data: answer
+        });
+    }
     
 }
