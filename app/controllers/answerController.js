@@ -74,6 +74,25 @@ module.exports = {
             success: true,
             data: answer
         });
+    },  
+    async deleteAnswer (request, response, next) {
+
+        const {answer_id} = request.params;
+
+        const {question_id} = request.params;
+
+        await Answer.findByIdAndRemove(answer_id);
+
+        const question = await Question.findById(question_id);
+
+        question.answers.splice(question.answers.indexOf(answer_id),1);
+
+        await question.save();
+
+        response.status(200).json({
+            success: true,
+            message: "Asnwer deleted successfull"
+        });
     }
     
 }
