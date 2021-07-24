@@ -4,7 +4,19 @@ const Question = require("../models/Question");
 module.exports = {
 
     async getAllQuestions(request, response, next) {
-        const questions = await Question.find();
+        let query = Question.find();
+        if (request.query.search) {
+            const searchObject = {};
+
+            const regex = new RegExp(request.query.search, "i");
+            searchObject["title"] = regex;
+
+            query = query.where(searchObject);
+        }
+        
+        const questions = await query;
+        
+        // const questions = await Question.find();
         
         response.status(200).json({
             success: true,
