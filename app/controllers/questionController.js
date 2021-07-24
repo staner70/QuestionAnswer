@@ -5,6 +5,11 @@ module.exports = {
 
     async getAllQuestions(request, response, next) {
         let query = Question.find();
+        const populate = true;
+        const populateObject = {
+            path: "user",
+            select: "name profile_image"
+        };
         if (request.query.search) {
             const searchObject = {};
 
@@ -12,6 +17,10 @@ module.exports = {
             searchObject["title"] = regex;
 
             query = query.where(searchObject);
+        }
+
+        if (populate) {
+            query = query.populate(populateObject);
         }
         
         const questions = await query;
