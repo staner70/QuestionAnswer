@@ -10,6 +10,7 @@ module.exports = {
             path: "user",
             select: "name profile_image"
         };
+        // Search
         if (request.query.search) {
             const searchObject = {};
 
@@ -18,17 +19,45 @@ module.exports = {
 
             query = query.where(searchObject);
         }
-
+        // Populate
         if (populate) {
             query = query.populate(populateObject);
         }
+        // Pagination
+        const page = parseInt(request.query.page) || 1;
+        const limit = parseInt(request.query.limit) || 5;
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const pagination = {};
+        const total = await Question.countDocuments();
+
+        if (startIndex > 0) {
+            pagination.previous = {
+                page : page - 1,
+                limit : limit
+            }
+        }        
         
+        if (endIndex < total) {
+            pagination.next = {
+                page : page + 1,
+                limit : limit
+            }
+        }
+
+        query = query.skip(startIndex).limit(limit);
+
+
         const questions = await query;
         
         // const questions = await Question.find();
         
         response.status(200).json({
             success: true,
+            count : questions.length,
+            pagination : pagination,
             data: questions
         });
     },
