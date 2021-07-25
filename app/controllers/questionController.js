@@ -123,6 +123,7 @@ module.exports = {
         };
 
         question.likes.push(request.user.id);
+        question.likeCount = question.likes.length;
         await question.save();
 
         response.status(200).json({
@@ -140,6 +141,7 @@ module.exports = {
         }
         const index = question.likes.indexOf(request.user.id);
         question.likes.splice(index, 1);
+        question.likeCount = question.likes.length;
         await question.save();
 
         response.status(200).json({
