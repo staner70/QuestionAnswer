@@ -49,6 +49,20 @@ module.exports = {
 
         query = query.skip(startIndex).limit(limit);
 
+        // Sort : req.query.sortBy most-answered most-liked
+        const sortKey = request.query.sortBy;
+
+        if (sortKey === "most-answered") {
+            query = query.sort("-answerCount -createdAt");
+        }
+        if (sortKey === "most-liked") {
+            query = query.sort("-likeCount -createdAt");
+        }
+        else {
+            query = query.sort("-createdAt");
+        }
+
+
 
         const questions = await query;
         
